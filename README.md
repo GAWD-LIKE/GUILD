@@ -22,7 +22,7 @@ This site is designed to be deployed on GitHub Pages:
 
 1. Go to your repository settings
 2. Navigate to "Pages" section
-3. Select the branch (e.g., `main` or `claude/whats-u-015ChwuJhFF4W6t3Xcs2zWgJ`)
+3. Select the branch (e.g., `main`)
 4. Set the source to the root directory
 5. Save and your site will be live!
 
@@ -39,4 +39,4 @@ Feel free to customize:
 
 ## License
 
-© 2024 GAWDLIKE Corp. All rights reserved.
+(c) 2026 GAWDLIKE Corp. All rights reserved.

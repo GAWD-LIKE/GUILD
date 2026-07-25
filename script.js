@@ -1,4 +1,3 @@
-// Smooth scroll behavior
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -9,12 +8,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 block: 'start'
             });
         }
+
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+        }
     });
 });
 
-// Navbar background on scroll
 const navbar = document.querySelector('.navbar');
-let lastScroll = 0;
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (navToggle) {
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        navToggle.classList.toggle('active');
+    });
+}
 
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
@@ -26,11 +37,8 @@ window.addEventListener('scroll', () => {
         navbar.style.background = 'rgba(10, 14, 39, 0.95)';
         navbar.style.boxShadow = 'none';
     }
-
-    lastScroll = currentScroll;
 });
 
-// Intersection Observer for fade-in animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -45,7 +53,6 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all cards and sections
 document.addEventListener('DOMContentLoaded', () => {
     const elements = document.querySelectorAll('.company-card, .project-card, .capability');
 
@@ -57,28 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Contact form handling
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-
-        // Get form data
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData);
-
-        // Show success message (you can customize this)
         alert('Thank you for your message! We will get back to you soon.');
-
-        // Reset form
         contactForm.reset();
-
-        // In a real application, you would send this data to a server
         console.log('Form submitted:', data);
     });
 }
 
-// Particle effect on mouse move (optional enhancement)
 document.addEventListener('mousemove', (e) => {
     if (Math.random() > 0.95) {
         createParticle(e.clientX, e.clientY);
@@ -87,55 +84,52 @@ document.addEventListener('mousemove', (e) => {
 
 function createParticle(x, y) {
     const particle = document.createElement('div');
-    particle.style.position = 'fixed';
-    particle.style.left = x + 'px';
-    particle.style.top = y + 'px';
-    particle.style.width = '4px';
-    particle.style.height = '4px';
-    particle.style.background = 'rgba(0, 255, 136, 0.6)';
-    particle.style.borderRadius = '50%';
-    particle.style.pointerEvents = 'none';
-    particle.style.zIndex = '9999';
-    particle.style.animation = 'particleFade 1s ease-out forwards';
+    const dx = (Math.random() * 100 - 50).toFixed(1);
+    const dy = (Math.random() * 100 - 50).toFixed(1);
+    const id = 'p' + Date.now() + Math.random().toString(36).slice(2, 6);
 
+    particle.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 4px;
+        height: 4px;
+        background: rgba(0, 255, 136, 0.6);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        animation: ${id} 1s ease-out forwards;
+    `;
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ${id} {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(${dx}px, ${dy}px) scale(0); }
+        }
+    `;
+    document.head.appendChild(style);
     document.body.appendChild(particle);
 
     setTimeout(() => {
         particle.remove();
+        style.remove();
     }, 1000);
 }
 
-// Add particle animation to CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes particleFade {
-        0% {
-            opacity: 1;
-            transform: translate(0, 0) scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0);
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Add active state to navigation links based on scroll position
 window.addEventListener('scroll', () => {
     const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
+    const activeLinks = document.querySelectorAll('.nav-links a');
 
     let current = '';
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
         if (window.pageYOffset >= sectionTop - 200) {
             current = section.getAttribute('id');
         }
     });
 
-    navLinks.forEach(link => {
+    activeLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
             link.classList.add('active');
@@ -143,7 +137,5 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Console easter egg
 console.log('%c GAWDLIKE Corp. ', 'background: linear-gradient(135deg, #00ff88, #0099ff); color: #0a0e27; font-size: 20px; font-weight: bold; padding: 10px;');
 console.log('%c Jellyfish Labs Research Group ', 'background: #00d4ff; color: #0a0e27; font-size: 16px; font-weight: bold; padding: 8px;');
-console.log('%c Looking for something? 🔍 ', 'color: #00ff88; font-size: 14px;');

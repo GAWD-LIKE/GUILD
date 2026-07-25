@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#
+# Strip Claude-Session lines, ensure Co-Authored-By is present.
+
+MSG_FILE="$1"
+
+sed -i '/^Claude-Session:/d' "$MSG_FILE"
+
+if ! grep -q 'Co-Authored-By:' "$MSG_FILE"; then
+    printf '\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\n' >> "$MSG_FILE"
+fi
